@@ -24,7 +24,7 @@ export function UserMsg() {
   return (
     <section className={"user-msg " + msg.type}>
         <p>{msg.txt}</p>
-    <h1>Hey</h1>
+    <h1></h1>
     </section>
   )
 }

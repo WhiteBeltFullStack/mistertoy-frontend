@@ -43,6 +43,11 @@ export function LoginSignup() {
 
   return (
     <div className="login-page">
+      <div className="btns">
+        <a href="#" onClick={() => setIsSignUp(!isSignup)}>
+          {isSignup ? 'Already a member? Login' : 'New user? Signup here'}
+        </a>
+      </div>
       <form className="login-form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -74,12 +79,6 @@ export function LoginSignup() {
         )}
         <button>{isSignup ? 'Signup' : 'Login'}</button>
       </form>
-
-      <div className="btns">
-        <a href="#" onClick={() => setIsSignUp(!isSignup)}>
-          {isSignup ? 'Already a member? Login' : 'New user? Signup here'}
-        </a>
-      </div>
     </div>
   )
 }

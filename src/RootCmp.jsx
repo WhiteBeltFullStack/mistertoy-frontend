@@ -23,10 +23,10 @@ export function RootCmp() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
 
-              <Route path="/todo/:todoId" element={<ToyDetails />} />
-              <Route path="/todo/edit/:todoId" element={<ToyEdit />} />
-              <Route path="/todo/edit" element={<ToyEdit />} />
-              <Route path="/todo" element={<ToyIndex />} />
+              <Route path="/toy/:toyId" element={<ToyDetails />} />
+              <Route path="/toy/edit/:toyId" element={<ToyEdit />} />
+              <Route path="/toy/edit" element={<ToyEdit />} />
+              <Route path="/toy" element={<ToyIndex />} />
               <Route path="/user" element={<UserDetails />} />
             </Routes>
           </main>

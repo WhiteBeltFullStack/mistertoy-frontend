@@ -42,6 +42,12 @@ a.active {
   align-self: center;
 }
 
+.login-page {
+  display: flex;
+  place-items: center;
+  gap: 20px;
+}
+
 @media (max-width: 720px) {
   .app-header {
     color: var(--clr2bg-light);
