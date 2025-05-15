@@ -1,0 +1,105 @@
+.toy-list {
+  padding: 15px 0 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, max-content));
+  justify-content: center;
+  gap: 15px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  .toy-item {
+    display: flex;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--clr1bg);
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 250px; /* Ensure consistency in item height */
+
+    /* Add styles for the ToyPreview component (if needed) */
+    .toy-preview {
+      /* Your ToyPreview styles here */
+    }
+
+    .toy-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #45a049;
+        }
+
+        &:focus {
+          outline: none;
+        }
+
+        &.remove {
+          background-color: #f44336;
+
+          &:hover {
+            background-color: #e53935;
+          }
+        }
+
+        &.details,
+        &.edit {
+          background-color: #2196f3;
+
+          &:hover {
+            background-color: #1976d2;
+          }
+        }
+      }
+
+      /* Add a space between buttons */
+      .details,
+      .edit {
+        margin-top: 5px;
+      }
+    }
+  }
+}
+
+.pagination {
+  justify-self: center;
+  margin-top: 20px;
+
+  /* Styling for the pagination buttons, if needed */
+  .pagination-button {
+    padding: 0.5rem 1rem;
+    margin: 0 5px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #1976d2;
+    }
+
+    &:disabled {
+      background-color: #e0e0e0;
+      cursor: not-allowed;
+    }
+  }
+}

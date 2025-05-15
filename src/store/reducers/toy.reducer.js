@@ -19,12 +19,15 @@ export const SET_FILTER = 'SET_FILTER'
 //UNDO TODOS
 export const UNDO_TOY = 'UNDO_TOY'
 
+export const SET_STATS = 'SET_STATS'
+
 const initialState = {
   toys: [],
   isLoading: false,
 
   maxPage: 0,
   filterBy: toyService.getDefaultFilter(),
+  toyStats: [],
   // lastTodos:[] ----OPTIMISTIC WAY TO SAVE LAST TODOS AND RENDER THEM IF FAIL
 }
 
@@ -67,6 +70,9 @@ export function toyReducer(state = initialState, cmd = {}) {
 
     case SET_FILTER:
       return { ...state, filterBy: { ...state.filterBy, ...cmd.filterBy } }
+
+    case SET_STATS:
+      return { ...state, toyStats: cmd.toyStats }
 
     // case UNDO_TODOS:
     //   return {...state,

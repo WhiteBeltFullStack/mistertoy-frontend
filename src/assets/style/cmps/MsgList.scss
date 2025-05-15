@@ -1,0 +1,105 @@
+.reviews-container {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  .reviews-section {
+    overflow-y: auto;
+    margin-bottom: 1rem;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        margin-bottom: 0.75rem;
+        padding: 0.5rem;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+        h3 {
+          justify-self: start;
+          margin: 0;
+          font-size: 1.1rem;
+          color: #333;
+        }
+
+        p {
+          margin: 0.25rem 0 0;
+          color: #666;
+        }
+      }
+    }
+
+    p {
+      color: #777;
+      font-style: italic;
+    }
+  }
+
+  .pagination {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:disabled {
+        background-color: #ddd;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: #0056b3;
+      }
+    }
+  }
+
+  .comment {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+
+    input[type='text'] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+
+      &:focus {
+        border-color: #999;
+      }
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}

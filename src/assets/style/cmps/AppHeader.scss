@@ -1,0 +1,64 @@
+.app-header {
+  background-color: $clr1;
+  color: $clr2bg-light;
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+
+    h1 {
+      margin-inline-end: auto;
+    }
+  }
+
+  .app-nav {
+    display: flex;
+    gap: 15px;
+
+    a.active {
+      color: rgb(241, 212, 241);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 0.3em;
+      border: 1px solid $gray2;
+      background-color: $clr2bg-light;
+    }
+  }
+
+  section {
+    display: flex;
+    gap: 20px;
+
+    button {
+      background-color: $clr2bg;
+      color: $clr2;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $clr2;
+        color: white;
+      }
+    }
+  }
+
+  .login-page {
+    display: flex;
+    place-items: center;
+    gap: 20px;
+  }
+
+  @media (max-width: 720px) {
+    .app-header {
+      color: $clr2bg-light;
+    }
+  }
+
+  //closing app headeer
+}

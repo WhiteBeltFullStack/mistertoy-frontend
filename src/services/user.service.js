@@ -1,128 +1,127 @@
 import { storageService } from './async-storage.service.js'
 
+import { httpService } from './http.service'
+
 export const userService = {
-  getLoggedinUser,
   login,
-  logout,
   signup,
+  logout,
+  getLoggedinUser,
+  getEmptyCredentials,
   getById,
   query,
-  getEmptyCredentials,
-  updateBalance,
-  addActivity,
-  updateUserPrefs,
+  // updateBalance,
+  // addActivity,
+  // updateUserPrefs,
 }
-const STORAGE_KEY_LOGGEDIN = 'user'
-const STORAGE_KEY = 'userDB'
+const BASE_URL = 'auth/'
+const STORAGE_KEY = 'loggedinUser'
 
-function query() {
-  return storageService.query(STORAGE_KEY)
+async function login({ username, password }) {
+  try {
+    const user = await httpService.post(BASE_URL + 'login', { username, password })
+    _setLoggedinUser(user)
+    return user
+  } catch (error) {
+    console.log('Could not login')
+    throw error
+  }
+}
+
+async function signup(credentials) {
+  try {
+    const user = await httpService.post(BASE_URL + 'signup', credentials)
+    _setLoggedinUser(user)
+    return user
+  } catch (error) {
+    console.log('Could not signup')
+    throw error
+  }
+}
+
+async function logout() {
+  try {
+    await httpService.post(BASE_URL + 'logout')
+    sessionStorage.removeItem(STORAGE_KEY)
+  } catch (error) {
+    console.log('Could not logout')
+    throw error
+  }
+}
+
+function getLoggedinUser() {
+  return JSON.parse(sessionStorage.getItem(STORAGE_KEY))
 }
 
 function getById(userId) {
   return storageService.get(STORAGE_KEY, userId)
 }
 
-function login({ username, password }) {
-  return storageService.query(STORAGE_KEY).then(users => {
-    const user = users.find(user => user.username === username)
-    if (user) return _setLoggedinUser(user)
-    else return Promise.reject('Invalid login')
-  })
-}
-
-function signup({ username, password, fullname }) {
-  const user = {
-    username,
-    password,
-    fullname,
-    balance: 10000,
-    activities: [],
-    pref: getDefaultPrefs(),
-  }
-
-  user.createdAt = user.updatedAt = Date.now()
-
-  return storageService.post(STORAGE_KEY, user).then(_setLoggedinUser)
-}
-
-function logout() {
-  sessionStorage.removeItem(STORAGE_KEY_LOGGEDIN)
-  return Promise.resolve()
-}
-
-function getLoggedinUser() {
-  return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGEDIN))
+function query() {
+  return storageService.query(STORAGE_KEY)
 }
 
 function _setLoggedinUser(user) {
-  const userToSave = {
-    _id: user._id,
-    fullname: user.fullname,
-    balance: user.balance,
-    pref: user.pref,
-    activities: user.activities,
-  }
-  sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify(userToSave))
-  return userToSave
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+  return user
 }
 
 function getEmptyCredentials() {
   return {
     fullname: '',
-    username: 'muki',
-    password: 'muki1',
+    username: '',
+    password: '',
   }
 }
+//NO NEED AT THE MOMENT
+// function updateBalance(diff) {
+//   const loggedInUser = getLoggedinUser()
+//   if (!loggedInUser) return
+//   return getById(loggedInUser._id).then(user => {
+//     user.balance += diff
+//     return storageService.put(STORAGE_KEY, user).then(user => {
+//       _setLoggedinUser(user)
+//       return user.balance
+//     })
+//   })
+// }
 
-function updateBalance(diff) {
-  const loggedInUser = getLoggedinUser()
-  if (!loggedInUser) return
-  return getById(loggedInUser._id).then(user => {
-    user.balance += diff
-    return storageService.put(STORAGE_KEY, user).then(user => {
-      _setLoggedinUser(user)
-      return user.balance
-    })
-  })
-}
+// function addActivity(txt) {
+//   const activity = {
+//     txt,
+//     at: Date.now(),
+//   }
 
-function addActivity(txt) {
-  const activity = {
-    txt,
-    at: Date.now(),
-  }
+//   const loggedInUser = getLoggedinUser()
+//   if (!loggedInUser) return Promise.reject('No Logged in user')
+//   return getById(loggedInUser._id)
+//     .then(user => {
+//       if (!user.activities) user.activities = []
+//       user.activities.unshift(activity)
+//       return user
+//     })
+//     .then(updatedUser => {
+//       return storageService.put(STORAGE_KEY, updatedUser).then(savedUser => {
+//         _setLoggedinUser(savedUser)
+//         return savedUser
+//       })
+//     })
+// }
 
-  const loggedInUser = getLoggedinUser()
-  if (!loggedInUser) return Promise.reject('No Logged in user')
-  return getById(loggedInUser._id)
-    .then(user => {
-      if (!user.activities) user.activities = []
-      user.activities.unshift(activity)
-      return user
-    })
-    .then(updatedUser => {
-      return storageService.put(STORAGE_KEY, updatedUser).then(savedUser => {
-        _setLoggedinUser(savedUser)
-        return savedUser
-      })
-    })
-}
+// function updateUserPrefs(userToUpdate) {
+//   const loggedInUserId = getLoggedinUser()._id
+//   return getById(loggedInUserId).then(user => {
+//     user = { ...user, ...userToUpdate }
+//     return storageService.put(STORAGE_KEY, user).then(savedUser => {
+//       _setLoggedinUser(savedUser)
+//       return savedUser
+//     })
+//   })
+// }
 
-function updateUserPrefs(userToUpdate) {
-  const loggedInUserId = getLoggedinUser()._id
-  return getById(loggedInUserId).then(user => {
-    user = { ...user, ...userToUpdate }
-    return storageService.put(STORAGE_KEY, user).then(savedUser => {
-      _setLoggedinUser(savedUser)
-      return savedUser
-    })
-  })
-}
-
-function getDefaultPrefs() {
-  return { color: '#eeeeee', bgColor: '#191919', fullname: '' }
-}
+// function getDefaultPrefs() {
+//   return { color: '#eeeeee', bgColor: '#191919', fullname: '' }
+// }
 
 // signup({username: 'muki', password: 'muki1', fullname: 'Muki Ja'})
 // login({username: 'muki', password: 'muki1'})

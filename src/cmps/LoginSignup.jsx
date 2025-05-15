@@ -1,4 +1,4 @@
-// import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 import { login, signup } from '../store/actions/user.actions.js'
 import { userService } from '../services/user.service.js'
 import { useState } from 'react'
@@ -21,24 +21,22 @@ export function LoginSignup() {
     isSignup ? _signup(credentials) : _login(credentials)
   }
 
-  function _login(credentials) {
-    login(credentials)
-      .then(() => {
-        showSuccessMsg('Logged in successfully')
-      })
-      .catch(err => {
-        showErrorMsg('Oops try again')
-      })
+  async function _login(credentials) {
+    try {
+      await login(credentials)
+      showSuccessMsg('Logged in successfully')
+    } catch (error) {
+      showErrorMsg('Oops try again')
+    }
   }
 
-  function _signup(credentials) {
-    signup(credentials)
-      .then(() => {
-        showSuccessMsg('Signed in successfully')
-      })
-      .catch(err => {
-        showErrorMsg('Oops try again')
-      })
+  async function _signup(credentials) {
+    try {
+      await signup(credentials)
+      showSuccessMsg('Signed in successfully')
+    } catch (error) {
+      showErrorMsg('Oops try again')
+    }
   }
 
   return (

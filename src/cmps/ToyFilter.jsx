@@ -3,10 +3,16 @@ import { useState, useEffect, useRef } from 'react'
 import { utilService } from '../services/util.service.js'
 import { toyService } from '../services/toy.service.js'
 
+import * as Yup from 'yup'
+import { Formik, Form, Field } from 'formik'
+import Select from 'react-select'
+
 export function ToyFilter({ filterBy, onSetFilter }) {
-  const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
-  onSetFilter = useRef(utilService.debounce(onSetFilter)).current
   const [labels, setLabels] = useState([])
+
+  const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
+
+  onSetFilter = useRef(utilService.debounce(onSetFilter)).current
 
   useEffect(() => {
     // Notify parent
@@ -14,15 +20,15 @@ export function ToyFilter({ filterBy, onSetFilter }) {
     onSetFilter(filterByToEdit)
   }, [filterByToEdit])
 
-  function loadToyLabels() {
-    toyService
-      .getToyLabels()
-      .then(setLabels)
-      .catch(err => {
-        console.log('Had issues in toy edit:', err)
-        navigate('/toy')
-        showErrorMsg('Toy not found!')
-      })
+  async function loadToyLabels() {
+    try {
+      const toyLabels = await toyService.getToyLabels()
+      setLabels(toyLabels)
+    } catch (error) {
+      console.log('Had issues in toy edit:', error)
+      navigate('/toy')
+      showErrorMsg('Toy not found!')
+    }
   }
 
   function handleChange({ target }) {
@@ -46,8 +52,8 @@ export function ToyFilter({ filterBy, onSetFilter }) {
         break
     }
 
-    console.log('value:',value)
-    console.log('field:',field)
+    console.log('value:', value)
+    console.log('field:', field)
     setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
   }
 
@@ -86,13 +92,33 @@ export function ToyFilter({ filterBy, onSetFilter }) {
         />
 
         <label htmlFor="labels">Labels:</label>
-        <select  name="labels" id="labels" multiple value={filterByToEdit.labels || []} onChange={handleChange}>
+        <Select
+          placeholder="Labels"
+          name="labels"
+          id="labels"
+          isMulti
+          value={(filterByToEdit.labels || []).map(label => ({
+            value: label,
+            label: label,
+          }))}
+          onChange={selectedOptions => {
+            const selectedLabels = selectedOptions.map(option => option.value)
+            setFilterByToEdit(prev => ({ ...prev, labels: selectedLabels }))
+          }}
+          options={labels.map(label => ({
+            value: label,
+            label: label,
+          }))}
+          menuPortalTarget={document.body}
+        />
+        {/* <label htmlFor="labels">Labels:</label>
+        <select name="labels" id="labels" multiple value={filterByToEdit.labels || []} onChange={handleChange}>
           {labels.map(label => (
             <option key={label} value={label}>
               {label}
             </option>
           ))}
-        </select>
+        </select> */}
 
         <select name="sortBy" id="sortBy" value={sortBy} onChange={handleChange}>
           <option value="">Sort By</option>

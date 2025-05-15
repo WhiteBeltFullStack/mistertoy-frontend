@@ -1,0 +1,63 @@
+/* flex helpers */
+
+
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+.flex {
+  @include flex();
+}
+
+.flex.flex-column {
+  @include flex(column);
+}
+
+.flex.justify-center {
+  @include flex(row, center);
+}
+
+.flex.justify-between {
+  @include flex(row, space-between);
+}
+
+.flex.align-center {
+  @include flex(row, flex-start, center);
+}
+
+.colored-text {
+  color: var($clr1);
+}
+
+/* list helpers */
+
+.clean-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+/* font awsome */
+
+.fa {
+  font-family: fa;
+}
+
+.fa.fa-facebook::before {
+  content: '\f39e';
+}
+
+.fa.fa-twitter::before {
+  content: '\f099';
+}
+
+.fa.fa-dribbble::before {
+  content: '\f17d';
+}
+
+.fa.fa-behance::before {
+  content: '\f1b4';
+}

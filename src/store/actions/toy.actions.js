@@ -4,6 +4,7 @@ import {
   ADD_TOY,
   REMOVE_TOY,
   SET_IS_LOADING,
+  SET_STATS,
   // SET_MAX_PAGE,
   SET_TOYS,
   // UNDO_TOYS,
@@ -11,55 +12,85 @@ import {
 } from '../reducers/toy.reducer.js'
 import { store } from '../store.js'
 
-export function loadToys(pageIdx) {
+export async function loadToys(pageIdx) {
   const filterBy = store.getState().toyModule.filterBy
   store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-  return toyService
-    .query(filterBy, pageIdx)
-    .then(({toys,totalCount} )=> {
-      store.dispatch({ type: SET_TOYS, toys })
-      // _setTodosData(maxPage, doneTodosPercent)
-      return {toys,totalCount}
-    })
-    .catch(err => {
-      console.log('todo action -> Cannot load todos', err)
-      throw err
-    })
-    .finally(() => {
-      store.dispatch({ type: SET_IS_LOADING, isLoading: false })
-    })
-}
 
-export function saveToy(toy) {
+
+  try {
+    const { toys, totalCount, PAGE_SIZE } = await toyService.query(filterBy, pageIdx)
+    store.dispatch({ type: SET_TOYS, toys })
+    return { totalCount, PAGE_SIZE }
+  } catch (error) {
+    console.log('toy action -> Cannot load toys', error)
+    throw error
+  } finally {
+    store.dispatch({ type: SET_IS_LOADING, isLoading: false })
+  }
+}
+// export function loadToys(pageIdx) {
+//   const filterBy = store.getState().toyModule.filterBy
+//   store.dispatch({ type: SET_IS_LOADING, isLoading: true })
+//   return toyService
+//     .query(filterBy, pageIdx)
+//     .then(({ toys, totalCount, PAGE_SIZE }) => {
+//       store.dispatch({ type: SET_TOYS, toys })
+//       // _settoysData(maxPage, donetoysPercent)
+
+//       return { toys, totalCount, PAGE_SIZE }
+//     })
+//     .catch(err => {
+//       console.log('toy action -> Cannot load toys', err)
+//       throw err
+//     })
+//     .finally(() => {
+//       store.dispatch({ type: SET_IS_LOADING, isLoading: false })
+//     })
+// }
+
+export async function saveToy(toy) {
   const type = toy._id ? UPDATE_TOY : ADD_TOY
-  return toyService
-    .save(toy)
-    .then(savedToy => {
-      store.dispatch({ type, toy: savedToy })
-      // _setTodosData(maxPage, doneTodosPercent)
-      return savedToy
-    })
-
-    .catch(err => {
-      console.log('todo action -> Cannot save todo', err)
-      throw err
-    })
+  try {
+    const savedToy = await toyService.save(toy)
+    store.dispatch({ type, toy: savedToy })
+    return savedToy
+  } catch (error) {
+    console.log('toy action -> Cannot save toy', error)
+    throw error
+  }
 }
 
-export function removeToy(toyId) {
-  return toyService
-    .remove(toyId)
-    .then(() => {
-      store.dispatch({ type: REMOVE_TOY, toyId })
-      // _setTodosData(maxPage, doneTodosPercent)
-    })
+export async function removeToy(toyId) {
+  try {
+    await toyService.remove(toyId)
+    store.dispatch({ type: REMOVE_TOY, toyId })
+  } catch (error) {
+    console.log('toy action -> Cannot remove toy', error)
+    throw error
+  }
+ 
+  // return toyService
+  //   .remove(toyId)
+  //   .then(() => {
 
-    .catch(err => {
-      console.log('todo action -> Cannot remove todo', err)
-      throw err
-    })
+  //     // _settoysData(maxPage, donetoysPercent)
+  //   })
+
+  //   .catch(err => {
+  //     console.log('toy action -> Cannot remove toy', err)
+  //     throw err
+  //   })
 }
 
+export async function getStats() {
+  try {
+    const stats = await toyService.getToyStats()
+    store.dispatch({ type: SET_STATS, toyStats: stats })
+  } catch (error) {
+    console.log('Cannot load stats', error)
+    throw error
+  }
+}
 //OPTIMISTIC
 // export function removeTodoOpt(todoId) {
 //   store.dispatch({ type: REMOVE_TOY, todoId })

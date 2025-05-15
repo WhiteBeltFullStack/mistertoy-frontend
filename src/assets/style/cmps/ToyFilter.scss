@@ -1,0 +1,65 @@
+.toy-filter {
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  font-family: sans-serif;
+  max-width: 100%;
+  overflow-x: auto;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    input[type='search'],
+    input[type='number'],
+    select {
+      padding: 0.5rem 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+    }
+
+    select {
+      width: auto;
+    }
+
+    button {
+      display: none;
+    }
+
+    .sort-dir {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 1.2rem;
+    }
+    span {
+      font-size: 1.2rem;
+      color: #4caf50;
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 1rem;
+    form {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    input[type='search'],
+    input[type='number'],
+    select {
+      width: 100%;
+    }
+  }
+}
